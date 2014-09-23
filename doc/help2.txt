@@ -1,0 +1,394 @@
+------------氣功波型(即發射出去的)絕技介紹--------------
+
+◎基本解說◎
+
+<BMP_BEGIN>
+file(0-23): sprite\sys\dennis_chase.bmp w: 81 h: 82 row: 4 col: 3
+weapon_hit_sound: data\020.wav
+weapon_drop_sound: data\020.wav
+weapon_broken_sound: data\020.wav
+<BMP_END>
+
+
+file:圖檔所在,同上面所介紹的
+
+weapon_hit_sound: 打中人的聲音
+weapon_drop_sound: 撞到地上的聲音
+weapon_broken_sound: 毀壞聲音
+
+
+<FRAME>0 flying
+pic: 0 state: 3000 wait: 2 next: 40 dvx: 3 dvy: 0 dvz: 0 centerx: 45
+centery: 38 hit_a: 0 hit_d: 0 hit_j: 0
+itr:
+kind: 0 x: 28 y: 30 w: 27 h: 26 dvx: 18 fall: 70 vrest: 15 bdefend: 60
+injury: 65 
+itr_end:
+bdy:
+kind: 0 x: 28 y: 30 w: 27 h: 26
+bdy_end:
+<FRAME_END>
+
+
+◎設定解說◎
+
+此時的 hit_a: 0 hit_d: 0 hit_j: 0是指特殊設定
+
+一般而言，
+hit_a: 時間減少量，(時間總值500/hit_a=持續時間)，數值越低減少越慢
+hit_d: 當時間總值扣完時動作跳到此
+hit_j: z方向移動速度，50為中間，49以下是上移的速度，51以上是下移的速度
+hit_Fa: 追縱的程度，說明如下：
+1= 追敵人的center(因為敵人站在地面，所以會下飄)
+2= 水平追敵
+3= 加速法追敵(追縱力較差)
+4= 天使之祝福(別的dat檔用了無效)
+5= 天使之祝福的開始(會追我方的人物很久)
+6= 惡魔之審判的開始(視敵人數目而增加，基本上是一個)
+7= 惡魔之審判,殃殞天降(可以做出打到地面的追蹤波)
+8= 吸血蝙蝠的開始(視敵人數目而增加，基本數值是三個，別的dat檔用了無效)
+9= 殃殞天降的開始(視敵人數目而增加，基本數值是四個)
+10= 加速(從慢變快)
+11= 極地火山
+12= 吸血蝙蝠
+13= 連環重炮的開始
+14= 連環重炮
+
+
+※當hit_a的時間到後，hit_Fa就會失去效用。
+※追蹤功能類型的氣功波dvx.dvy.dvz必須是0。
+
+
+氣功波state使用
+
+15= 若配合沒有bdy則永遠不會被打消。
+18= 氣功會冒煙，且會波及我方。
+3000="波"的飛行(ball-flying，波是指氣功波)，打到人和自己的武器會跳到
+     act10，打到別人的武器跳到act20。
+3001="波"打中敵時的爆破(hiting)，打到人和自己的武器不消失，正面打到別
+     人的武器act20。
+3002=波被取消，即被其他東西打中阻擋而爆破(hit)，打到人和自已的武器不消
+     失，打到別人type1的武器act20。
+3003=波的反彈及爆破(rebounding)，打到人和type2的武器不消失，打到別人的
+     武器act20。
+3004=波消失(disappear)，打到人和type2.4.6的武器不消失，打到type1的武器
+     act20。
+3005="拳氣"的飛行(henry wind-flying)，打到東西不消失，打到state3005的
+     act20，無法上下移動，沒有影子。
+3006=屬穿心攻擊的波(flying)，打到東西不消失，打到state3005.3006的act20
+     。
+
+◎氣功act分布◎
+0 : flying (飛行)
+10: hitting (打中敵人)
+20: hit (氣功波本身被打中)
+30: rebounding (被反彈) 
+------------------道具(weapon)的介紹--------------------
+
+◎type:1,4,6的輕型武器◎
+
+weapon_hp: 武器的hp量
+weapon_drop_hurt: 武器著地的損血量
+weapon_hit_sound: 被打到的聲音
+weapon_drop_sound: 掉到地上的聲音
+weapon_broken_sound: 毀壞的聲音
+
+<WEAPON_STRENGTH_LIST>(武器攻擊表開始)
+   entry: 1 normal 站著攻擊的威力和效果
+     dvx: 2 fall: 40 vrest: 10 bdefend: 16 injury: 30 effect: 3
+   entry: 2 jump 跳起攻擊的威力和效果 
+     dvx: 7 fall: 70 vrest: 10 bdefend: 16   injury: 30 effect: 3
+   entry: 3 run 跑步攻擊的威力和效果
+     dvx: 10 fall: 70 vrest: 10 bdefend: 16   injury: 40 effect: 3
+   entry: 4 dash 跑跳攻擊的威力和效果
+     dvx: 12 fall: 70 vrest: 20 bdefend: 60 injury: 40 effect: 3
+<WEAPON_STRENGTH_LIST_END>(武器攻擊表結束)
+
+在人物的wpoint的attacking使用哪個數字，就會用該entry的攻擊方式
+※可以自己新增entry: 5以上的數字，不過人物的attacking就要用5
+
+
+◎輕型道具act的分布◎
+0: in_the_sky (在空中)
+20: on_hand (在手中)
+40: throwing (丟出)
+60: on_ground (在地上)
+64: 可以撿的on_ground
+70: just_on_ground (剛掉到地上的動作)
+71: just_on_on_ground (同上，有何分別我也不清楚)
+
+state說明
+1000=輕型武器在空中(light weapon-in the sky)
+1001=輕型武器在手中(on hand)，類似arest:1
+1002=輕型武器被投擲(throwing)，重力變弱，打到人act5,10,15
+1003=輕型武器反彈(rebounding)
+1004=輕型武器在地上(on ground)，與itr kind2作用
+
+
+◎type 2重型武器◎
+
+大部分與其他weapon相同，僅act.state不同
+
+
+◎重型道具act分布◎
+0: in_the_sky (在空中)
+10: on_hand (在手中)
+20: 可以撿的on_ground
+21: just_on_ground (剛掉到地上的動作)
+
+state說明
+2000= 重型武器在空中(heavy weapon-in the sky))
+2001= 重型武器在手中
+2002= 重型武器在地上
+2004= 與itr kind2作用
+
+
+
+-------------新增人物、道具、武器、背景方法--------------
+
+id: 0 type: 0 file:data\template.dat =Template
+id: 52 type: 0 file:data\julian.dat =Julian 
+id: 51 type: 0 file:data\firzen.dat =Firzin
+id: 50 type: 0 file:data\louisEX.dat =LouisEX
+id: 38 type: 0 file:data\bat.dat =Bat
+id: 39 type: 0 file:data\justin.dat =Justin 
+id: 37 type: 0 file:data\knight.dat =Knight
+id: 36 type: 0 file:data\jan.dat =Jan
+id: 35 type: 0 file:data\monk.dat =Monk
+id: 34 type: 0 file:data\sorcerer.dat =Sorcerer
+id: 33 type: 0 file:data\jack.dat =Jack
+id: 32 type: 0 file:data\mark.dat =Mark
+id: 31 type: 0 file:data\hunter.dat =Hunter
+id: 30 type: 0 file:data\bandit.dat =Bandit
+id: 1 type: 0 file:data\deep.dat =Deep
+id: 2 type: 0 file:data\john.dat =John
+id: 4 type: 0 file:data\henry.dat =Henry
+id: 5 type: 0 file:data\rudolf.dat =Rudolf
+id: 6 type: 0 file:data\louis.dat =Louis
+id: 7 type: 0 file:data\firen.dat =Firen 
+id: 8 type: 0 file:data\freeze.dat =Freeze 
+id: 9 type: 0 file:data\dennis.dat =Dennis 
+id: 10 type: 0 file:data\woody.dat =Woody
+id: 11 type: 0 file:data\davis.dat =Davis
+
+id: 100 type: 1 file:data\weapon0.dat   #stick =木棒 
+id: 101 type: 1 file:data\weapon2.dat hoe =鐮刀 
+id: 120 type: 1 file:data\weapon4.dat #knife =小刀 
+id: 121 type: 4 file:data\weapon5.dat #baseball =棒球 
+id: 122 type: 6 file:data\weapon6.dat #milk =牛奶
+id: 123 type: 6 file:data\weapon8.dat #beer =啤酒
+id: 124 type: 1 file:data\weapon9.dat #< =回力標
+id: 150 type: 2 file:data\weapon1.dat #stone =岩石
+id: 151 type: 2 file:data\weapon3.dat #wooden_box =木箱
+id: 217 type: 2 file:data\weapon10.dat #louis_armour=Louis的手腳盔甲
+id: 218 type: 2 file:data\weapon11.dat #louis_armour=Louis的腰部盔甲
+id: 300 type: 5 file:data\criminal.dat #criminal =人質
+
+id: 200 type: 3 file:data\john_ball.dat =John的氣功波
+id: 201 type: 1 file:data\henry_arrow1.dat =弓箭
+id: 202 type: 1 file:data\rudolf_weapon.dat =飛鏢
+id: 203 type: 3 file:data\deep_ball.dat =破空斬
+id: 204 type: 3 file:data\henry_wind.dat =降龍掌
+id: 205 type: 3 file:data\dennis_ball.dat =Dennis的氣功波
+id: 206 type: 3 file:data\woody_ball.dat =Woody的氣功波
+id: 207 type: 3 file:data\davis_ball.dat =Davis的氣功波
+id: 208 type: 3 file:data\henry_arrow2.dat =穿空矢
+id: 209 type: 3 file:data\freeze_ball.dat =冷凍波
+id: 210 type: 3 file:data\firen_ball.dat =火焰彈
+id: 211 type: 3 file:data\firen_flame.dat =豪火球
+id: 212 type: 3 file:data\freeze_column.dat =冰霜拳
+id: 213 type: 1 file:data\weapon7.dat #ice_sword =冰峰之劍
+id: 214 type: 3 file:data\john_biscuit.dat =氣旋斬
+id: 215 type: 3 file:data\dennis_chase.dat =追蹤波
+id: 216 type: 3 file:data\jack_ball.dat =Jack的氣功波
+id: 219 type: 3 file:data\jan_chaseh.dat =天使的祝福
+id: 220 type: 3 file:data\jan_chase.dat =惡魔的審判
+id: 221 type: 3 file:data\firzen_chasef.dat =殃殞天降中的火球
+id: 222 type: 3 file:data\firzen_chasei.dat =殃殞天降中的冰球
+id: 223 type: 3 file:data\firzen_ball.dat =炎冰砲
+id: 224 type: 3 file:data\bat_ball.dat =激光眼
+id: 225 type: 3 file:data\bat_chase.dat =吸血蝙蝠
+id: 226 type: 3 file:data\justin_ball.dat =超能量摧毀炮
+id: 228 type: 3 file:data\julian_ball.dat =連環重炮
+id: 229 type: 3 file:data\julian_ball2.dat =極級破壞波
+
+id: 998 type: 5 file:data\etc.dat =電腦的指令
+id: 999 type: 5 file:data\broken_weapon.dat =毀壞的物件
+
+id: 4 file: bg\sys\hkc\bg.dat =香港紅砌體育館 
+id: 2 file: bg\sys\lf\bg.dat =獅子山森林 
+id: 3 file: bg\sys\sp\bg.dat =赤柱監獄 
+id: 5 file: bg\sys\gw\bg.dat =萬里長城 
+id: 6 file: bg\sys\qi\bg.dat =皇后島(冰火島) 
+id: 7 file: bg\sys\ft\bg.dat =禁絕之塔 
+id: 1 file: bg\sys\cuhk\bg.dat =香港中文大學 
+id: 0 file: bg\sys\thv\bg.dat =大堪村 
+id: 10 file: bg\template\1\bg.dat =樣本背景1 
+id: 11 file: bg\template\2\bg.dat =樣本背景2 
+id: 12 file: bg\template\3\bg.dat =樣本背景3 
+
+
+◎id◎
+
+id: ?
+1.id帶有特性和像電腦的靈魂一樣，如id:1是電腦用deep的戰鬥模式，id:2是用
+john的。
+2.特性：id:6有1次盔甲防禦效果但不防冰火.Hp小於1/3時按DJA才可變身，
+id:37有2次盔甲防禦效果但不防冰火，id:7.8當HP小於1/5時才可融合，id:8
+拳腳攻擊打到別人的氣功波會反彈成冷凍波，id:51mp回復很快、在闖關中以
+敵軍ratio來算等於兩個人，id:52有2次防禦、防冰火mp又回很快、闖關中以
+敵軍ratio來算等於三個人，id:201.202的道具不受吹笛子、白色龍捲效果影
+響而且射出去可以救人質，id:209的氣功波可將其他氣功波反彈成冷凍波，
+id:210.220.221.222.223.225.224.226.228的氣功波不會被id:209的效果影響
+，id:223.224的氣功波絕對只能直發無法上下移動，id:211的氣功波state:18
+不會波及我方。
+3.id:0 ~ 29 在隨機選角色(闖關中寫成id:1000)會出現，或隨機選背景。30 ~ 
+39、50 ~59是隱藏人物(背景)，要打lf2.net才會出現，100 ~ 199是會掉落的
+物品(可以更改)。
+4.(object到object_end之間)檔案(id)的總數不可超過100個，不然會造成遊戲
+無法進入。
+
+<特別發現>id:300的人物超強...
+
+
+◎type◎
+
+type:? 
+是指物件的種類 
+0:是沒有指定,人物是用這個種類 
+1:輕型武器
+2.重型武器
+3.是氣功波的類型,例如davis的氣功波
+4.輕型武器(僅可投擲的)(例:棒球) 
+5.一個資料檔是包含著特殊的資料(例:criminal檔,即人質檔) 
+6.可以喝的物件
+
+
+◎file◎
+
+file:?
+是指在哪個資料夾可以找到這個檔案
+一般都是寫file: data\???.dat；???是指名稱,什麼名稱可直接打開data這個資
+料夾看
+
+
+-------------------- 闖關(stage)介紹--------------------
+
+先用stage.dat裡的其中一段為例: 
+<STAGE>id: 42 #stage 5-3 
+<PHASE>bound: 1500 
+id: 300 hp: 100 act: 40 x: 1300 y: 0 reserve: 5 
+id: 300 hp: 100 act: 50 x: 1300 y: 0 reserve: 5 
+id: 122 x: 300 #milk 
+id: 122 x: 300 #milk 
+id: 122 x: 300 #milk 
+id: 122 x: 300 #milk ratio: .7 
+id: 123 x: 300 #beer 
+id: 123 x: 300 #beer ratio: .7 
+id: 3000 hp: 50 times: 2 ratio: 1 <SOLDIER>
+id: 1000 hp: 100 times: 2 <BOSS>
+id: 34 hp: 100 times: 2 ratio: .5 join: 300
+<PHASE_END>
+
+id:人物/道具的id
+
+以下是data.txt沒有的id:
+3000是Bandit或Hunter(隨機)
+1000是主角(id 0-29,隨機)
+300 是人質(要出現甚麼人質,跟act有關,如act: 0就是monk,請用編輯器查看
+           criminal.dat)
+
+hp:人物的hp
+join:人物加入時的hp
+times:人物重複出現的次數+1 
+ratio:我軍人數乘ratio=該人物出現數,如ratio是一以下,例: .5,我軍只有一個
+人該人物便不會出現,要兩個以上才行
+(2或以上乘.5=1或以上)
+
+<BOSS>和<SOLDIER>:如果<BOSS>未死,<SOLDIER>便會不停出現(設定times的話
+soldier就會失效)
+
+bound:可移動範圍,數字愈大,移動範圍愈大,上限是2200(1-5,2-5,3-5,4-5,5-5
+的上限是3000)
+
+act:剛出現的指令,例: act:211 該人物便會一出現就跳
+x:出現位置,例: x:300,該人物/道具便會在bound300的位置出現,可以是負數
+y:出現高度,例: y:-500,該人物便會從天空降下來(此設定僅對人物有效)
+reserve:人質復活次數(也可以用在別人身上) 
+#????:物件名稱(不打也可以)
+
+<STAGE>闖關開始
+id: xx闖關編號
+#stage x-x哪一關
+<PHASE>段落開始
+<PHASE_END>段落結束
+<STAGE_END>闖關結束
+<END>全部結束
+
+<特別發現>若從data.txt改變<BACKGROUND>的排序則闖關的場地會因之改變，因
+          執行檔執行的闖關背景是從第二行至第六行的bg。
+
+※場地上最多物件350個，否則無法發氣功波(opoint)
+※喝牛奶的時間99(喝造出來的牛奶時間是249)，喝酒的時間是154
+※武器掉到場外即消失(闖關右側例外)
+--------------------背景(bg)介紹---------------------
+
+name: ??? 名稱
+width: ? 地圖左右的寬度
+zboundary: ? ? 地圖上下的範圍(第一個數字是上邊界的位置，第二個數字是下
+               邊界的位置)
+shandow: bg\???\??\???.bmp 影子的圖片位置
+shandowsize: ? ? 影子的尺寸(第一個數字是左右寬度，第二個數字是上下的寬
+                 度)，它不會把圖片切掉
+※人物站的位置是圖片的正中間。
+
+layer: bg\sys\gw\s.bmp 圖片位置
+transparency: ? width: ? x: ? y: ? cc: ? c1: ? c2: ? loop: ?
+其他rect: ? height: ?
+layer_end
+
+layer是有照順序的，最後面敘述的(玩時)顯示在最前面
+※layer_end不能加冒號(:)
+
+transpparency: 0透明度(圖片黑色部分，0不透明，1透明)
+width: 794是不會動(圖片在整場移動距離=?-794)
+x: x座標
+y: y座標，最高點110
+loop: 多少距離放一個圖片
+cc: 多少時間循環一次
+c1: 循環內出現的時間
+c2: 循環內結束的時間
+示意圖：
+                        ←╮
+╰→→→→→→→→→→→→╯
+      c1→出現→c2        cc
+
+rect: 色彩填滿
+width: 寬度(從x座標算起)
+height: 高度(從y座標算起)
+
+
+D.R.LF2次世代(Special)液態金屬人的弄法:
+1.先把透明人的圖片檔用小畫家將他的漏洞補滿(沒連好的線條練起來)
+2.將準備好的背景圖片(我們先叫他為T)框選(alt+A)複製之後~放到和透明人圖相同大小的圖片格中(可另開)
+3.將原先補滿的透明人圖片背景更換顏色(透明人本身必須是黑色身體和白色線條) 並且框選(alt+A)之後複製
+4.貼到另外開的背景圖片檔中 用滑鼠點右鍵選擇顏色[黑] 然後將圖片的背景色(按下貼上之後會出現在左下角的偏上)選擇第2個
+5.按下之後畫面會變成黑色全部呈現透明 也就是說 白色的線條存在 透明人的背景存在 但是中間的黑色已經被置換成轉備好的背景圖片(T)
+6.之後將背景顏色弄回黑色即可
+
+攻擊範圍~
+一般狀態下例如
+itr: 
+kind: 0 x: 40 y: 5 w: 35 h: 45 dvx: 9 dvy: -9 fall: 70 arest: 15 bdefend: 60 injury: 40 
+itr_end:
+
+攻擊全部場地例如
+itr:
+kind: 0 x: -7777 y: 64 w: 10101 h: 45 dvx: -5 dvy: -44 fall: 1070 vrest:300 bdefend: 116 injury: 40 zwidth: 1887
+itr_end:
+簡單的說
+x是後面的距離(超過身體圖片用-表示)
+w是前面的距離
+y是上面的距離(超過身體圖片用-表示)
+h是下面的距離
+zwidth是寬度
