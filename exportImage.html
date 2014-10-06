@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>export</title>
+	<style>
+		body, div{
+			margin: 0;
+			padding: 0;
+		}
+		input{
+			display: none;
+		}
+
+		canvas{
+			border:solid 1px #aaa;
+			background-color: #f00;
+		}
+	</style>
+</head>
+<body>
+	<input type="file" id="imgInput">
+	<canvas id="canvas"></canvas>
+	<script>
+		var canvas = document.getElementById("canvas");
+		var input = document.getElementById("imgInput");
+		var ctx = canvas.getContext("2d");
+		var imageData;
+		canvas.onclick = function(){
+			input.value = "";
+			input.click();
+		}
+
+		input.onchange = function(){
+			var img = new Image();
+			img.onload = function(){
+				var width = canvas.width = img.width;
+				var height = canvas.height = img.height;
+				ctx.drawImage(img, 0, 0);
+				imageData = ctx.getImageData(0, 0, width, height);
+				var data = imageData.data; 
+				for(var i = 0, l = data.length;i < l;i += 4){
+					var r = data[i];
+					var g = data[i+1];
+					var b = data[i+2];
+					var a = data[i+3];
+
+					var rg = Math.abs(r - g);
+					var gb = Math.abs(g - b);
+
+					if(r === 0 && g === 0 && b === 0 && a === 255){
+						data[i + 3] = 0;
+					}
+					else if(rg < 50 && gb < 50 && r < 150){
+						data[i] = data[i+1] = data[i+2] = 255;
+						data[i + 3] = r;
+					}
+				}
+				ctx.putImageData(imageData, 0, 0);
+			}
+			img.src = URL.createObjectURL(input.files[0]);
+		}
+	</script>
+</body>
+</html>
